@@ -1,0 +1,37 @@
+#cloud-config
+# hostname: Your PC Name
+hostname: ubuntu-server
+# Your TimeZone
+timezone: Asia/Bangkok
+# Create User: Ubuntu, Grant Permission: Sudo, Create: Password (hashed)
+users:
+  - name: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: sudo
+    lock_passwd: false
+    passwd: $6$rounds=4096$....(hashed-password)...
+# Package Name You Want to Install: E.g. curl, vim, git, ufw (Uncomplicated Firewall), nginx etc.
+packages:
+  - curl
+  - vim
+  - git
+  - ufw
+  - htop
+  - nginx
+  - python3-pip
+  - python3-venv
+# Order to Excuse package after installation complete: E.g. Nginx and firewall settings
+runcmd:
+  - echo "Welcome to your new Ubuntu server!"
+  - systemctl enable nginx
+  - systemctl start nginx
+  - ufw allow 'Nginx Full'
+  - ufw enable
+  - ufw status
+# Custom Text on Welcome Screen:
+write_files:
+  - path: /etc/motd
+    content: |
+      Welcome to Ubuntu Server
+      Managed by cloud-init.
